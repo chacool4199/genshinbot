@@ -1,2 +1,3 @@
-discord.py
+#discord.py
 asyncio
+discord.py==1.3.1
