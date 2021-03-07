@@ -3,6 +3,7 @@
 # 가끔가다 애가 인코딩을 잘못 읽어서 오류를 냅니다. 그것을 대비하기 위해 'utf-8'으로 읽으라고 선언합니다.
 
 import discord, asyncio # 디스코드 모듈과, 보조 모듈인 asyncio를 불러옵니다.
+import os
 # 아까 메모해 둔 토큰을 입력합니다
 
 client = discord.Client() # discord.Client() 같은 긴 단어 대신 client를 사용하겠다는 선언입니다.
