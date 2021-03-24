@@ -4,6 +4,15 @@
 
 import discord, asyncio # 디스코드 모듈과, 보조 모듈인 asyncio를 불러옵니다.
 import os
+import random
+
+import urllib
+from urllib.request import Request
+import bs4
+from bs4 import BeautifulSoup
+
+import selenium
+from selenium import webdriver
 # 아까 메모해 둔 토큰을 입력합니다
 
 client = discord.Client() # discord.Client() 같은 긴 단어 대신 client를 사용하겠다는 선언입니다.
@@ -878,8 +887,293 @@ async def on_message(message): # 메시지가 들어 올 때마다 가동되는 
         await message.channel.send(embed=embed)
 
     if message.content == "!가챠":
-        await message.channel.send("일이 아직 끝나지 않았어요..")
+        embed = discord.Embed()
+        embed.add_field(name="!상시", value="상시 10연차 시뮬레이션\n\000", inline=False)
+        embed.add_field(name="!한정", value="한정 10연차 시뮬레이션\n현재 픽업: 벤티, 노엘, 설탕, 레이저(준비중)\n\000", inline=False)
+        embed.add_field(name="!무기", value="무기 10연차 시뮬레이션\n현재 픽업: 종말 탄식의 노래, 천공의 검(준비중)", inline=False)
+        await message.channel.send(embed=embed)
 
+    def StandardWishStackCounter(user):
+
+        global standardGachaStack
+        # global oderNumber
+        a = 0
+
+        for x, y in standardGachaStack:   
+
+            if y == user:
+                
+                if x < 8:
+                    x = x + 1
+                    standardGachaStack[a][0] = x
+
+                    return 0
+
+                if x >= 8:
+                    x = 0
+                    standardGachaStack[a][0] = x
+
+                    return 1
+
+            a = a + 1
+
+        standardGachaStack.append([1, user])
+
+        return 0
+
+    def gacha(percent): # 확률을 퍼센트로 받아, 확률에 따라 참과 거짓을 반환하는 함수를 선언한다.
+
+        prob = percent * 0.01 # 퍼센트 값을 0과 1 사이의 숫자로 바꾼다.
+        rand = random.random() # 의사난수 모듈을 사용하여, 0과 1 사이의 난수 하나를 뽑는다.
+
+        if prob >= rand: # 확률보다 난수가 작거나 같으면 참(True)을 반환한다. 아니면 거짓(False)이다.
+            return True
+
+        else:
+            return False
+
+    def standardWish(user, count):
+
+        global standardGachaStack
+        global standardGachaList
+        global standardGachaResult
+        
+        # 천장발동
+        if count == 1:
+            for i in standardGachaList:
+                get = gacha(0.6)
+
+                if get == True:
+                    standardGachaList[i] = 5
+
+            for i in standardGachaList:
+                get = gacha(5.1)
+
+                if get == True:
+                    if standardGachaList[i] != 5:
+                        standardGachaList[i] = 4
+
+            a = 0
+            for i in standardGachaList:
+                
+                if i == 3:
+
+                    standardGachaList[a] = 5
+
+                    b = 0
+                    for x, y in standardGachaStack:
+                        
+                        if y == user:
+                            x = 0
+                            standardGachaStack[b][0] = x
+
+                            standardGachaList.sort(reverse=True)
+
+                            for i in standardGachaList:
+                                if i == 3:
+                                    j = standardGachaWeapon3[0]
+                                    getItem = random.randint(1, j)
+                                    standardGachaResult.append(standardGachaWeapon3[getItem])
+
+                                if i == 4:
+                                    item = True
+                                    rItem = random.randint(0,1)
+
+                                    if rItem == 0:
+                                        item = False
+                                    elif rItem == 1:
+                                        item = True
+
+                                    j = standardGachaWeapon4[0]
+                                    k = standardGachaCharactor4[0]
+
+                                    if item == True:
+                                        getItem = random.randint(1, j)
+                                        standardGachaResult.append(standardGachaWeapon4[getItem])
+
+                                    if item == False:
+                                        getItem = random.randint(1, k)
+                                        standardGachaResult.append(standardGachaCharactor4[getItem])
+                    
+
+                                if i == 5:
+                                    item = True
+                                    rItem = random.randint(0,1)
+
+                                    if rItem == 0:
+                                        item = False
+                                    elif rItem == 1:
+                                        item = True
+
+                                    j = standardGachaWeapon5[0]
+                                    k = standardGachaCharactor5[0]
+
+                                    if item == True:
+                                        getItem = random.randint(1, j)
+                                        standardGachaResult.append(standardGachaWeapon5[getItem])
+
+                                    if item == False:
+                                        getItem = random.randint(1, k)
+                                        standardGachaResult.append(standardGachaCharactor5[getItem])
+
+
+                            return standardGachaResult
+
+                    b = b + 1
+
+                a = a + 1
+
+        # 기본확률
+        if count == 0:
+            gacha5 = 0
+            gacha4 = 0
+            
+            for i in standardGachaList:
+                get = gacha(0.6)
+
+                if get == True:
+                    standardGachaList[i] = 5
+
+            for i in standardGachaList:
+                get = gacha(5.1)
+
+                if get == True:
+                    standardGachaList[i] = 4
+
+            for i in standardGachaList:
+
+                if i == 5:
+                    gacha5 = gacha5 + 1
+
+                elif i == 4:
+                    gacha4 = gacha4 + 1
+
+            #4성 5성 모두 획득실패시 4성 하나 확정
+            if gacha4 == 0 and gacha5 == 0:
+                standardGachaList[0] = 4
+
+            #5성 획득시 스택초기화
+            if gacha5 >= 1:
+                a = 0
+                for x, y in standardGachaStack:
+                    if y == user:
+                        x = 0
+                        standardGachaStack[a][0] = x
+                
+                    a = a + 1
+
+            standardGachaList.sort(reverse=True)
+
+            for i in standardGachaList:
+                if i == 3:
+                    j = standardGachaWeapon3[0]
+                    getItem = random.randint(1, j)
+                    standardGachaResult.append(standardGachaWeapon3[getItem])
+
+                if i == 4:
+                    item = True
+                    rItem = random.randint(0,1)
+
+                    if rItem == 0:
+                        item = False
+                    elif rItem == 1:
+                        item = True
+
+                    j = standardGachaWeapon4[0]
+                    k = standardGachaCharactor4[0]
+
+                    if item == True:
+                        getItem = random.randint(1, j)
+                        standardGachaResult.append(standardGachaWeapon4[getItem])
+
+                    if item == False:
+                        getItem = random.randint(1, k)
+                        standardGachaResult.append(standardGachaCharactor4[getItem])
+                    
+
+                if i == 5:
+                    item = True
+                    rItem = random.randint(0,1)
+
+                    if rItem == 0:
+                        item = False
+                    elif rItem == 1:
+                        item = True
+
+                    j = standardGachaWeapon5[0]
+                    k = standardGachaCharactor5[0]
+
+                    if item == True:
+                        getItem = random.randint(1, j)
+                        standardGachaResult.append(standardGachaWeapon5[getItem])
+
+                    if item == False:
+                        getItem = random.randint(1, k)
+                        standardGachaResult.append(standardGachaCharactor5[getItem])
+
+
+            return standardGachaResult
+
+        return -1
+
+    if message.content == "!상시":
+
+        global standardGachaList
+        global standardGachaResult
+
+        user = message.author.id
+
+        count = StandardWishStackCounter(user)
+
+        result = standardWish(user, count)
+
+        if result == -1:
+            await message.channel.send("ERROR1001 확인요망")
+
+        #await message.channel.send(result)
+
+        result01 = str(standardGachaList[0])+"성"
+        result02 = str(standardGachaList[1])+"성"
+        result03 = str(standardGachaList[2])+"성"
+        result04 = str(standardGachaList[3])+"성"
+        result05 = str(standardGachaList[4])+"성"
+        result06 = str(standardGachaList[5])+"성"
+        result07 = str(standardGachaList[6])+"성"
+        result08 = str(standardGachaList[7])+"성"
+        result09 = str(standardGachaList[8])+"성"
+        result10 = str(standardGachaList[9])+"성"
+        result11 = ""
+        for x, y in standardGachaStack:   
+
+            if y == user:
+                result11 = "현재스택은 총 "+str(x*10)+"스택으로 천장까지 "+str(90-x*10)+"스택 남았습니다"
+                break
+
+        #최종 결과화면 정리
+        msg = "<@{}>".format(message.author.id)
+        await message.channel.send(msg+"님에 가챠결과")
+        await message.channel.send(msg+"님에 "+result11)
+
+        embed = discord.Embed(title="", description="", color=0x4169E1)
+
+        #embed.set_thumbnail(url="https://i.imgur.com/cJH3kph.jpg")
+        embed.add_field(name=result01+"\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000", value=result[0], inline=False)
+        embed.add_field(name=result02, value=result[1], inline=False)
+        embed.add_field(name=result03, value=result[2], inline=False)
+        embed.add_field(name=result04, value=result[3], inline=False)
+        embed.add_field(name=result05, value=result[4], inline=False)
+        embed.add_field(name=result06, value=result[5], inline=False)
+        embed.add_field(name=result07, value=result[6], inline=False)
+        embed.add_field(name=result08, value=result[7], inline=False)
+        embed.add_field(name=result09, value=result[8], inline=False) 
+        embed.add_field(name=result10, value=result[9], inline=False) 
+
+        await message.channel.send(embed=embed)  
+
+        standardGachaList = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+        standardGachaResult = [ ]
+
+        
     if message.content == "!편의":
         await message.channel.send("일이 아직 끝나지 않았어요..")
 
