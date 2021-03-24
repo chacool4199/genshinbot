@@ -31,6 +31,32 @@ cmdData = [(0, '엠버'), (0, '베넷'), (0, '다이루크'), (0, '클레'), (0,
 # charactorData_water = ['바바라', '모나', '행추', '타르탈리아']
 # charactorData_electric = ['북두', '피슬', '각청']
 
+global standardGachaStack
+standardGachaStack = [[0, 0]]
+
+global standardGachaCharactor4 
+standardGachaCharactor4 = [16, "신염", "설탕", "디오나", "중운", "노엘", "베넷", "피슬", "응광", "행추", "북두", "향릉", "엠버", "레이저", "케이아", "바바라", "리사"]
+
+global standardGachaCharactor5 
+standardGachaCharactor5 = [5, "각청", "치치", "진", "모나", "다이루크"]
+
+global standardGachaWeapon3
+standardGachaWeapon3 = [13, "탄궁", "신궁의서약", "까마귀깃활", "비취오브", "드래곤슬레이어영웅담", "마도서론", "흑술창", "훌륭한대화수단", "드래곤블러드소드", "강철의그림자",
+                        "비천어검", "여명신검", "차가운칼날"]
+
+global standardGachaWeapon4 
+standardGachaWeapon4 = [18, "녹슨활", "제례활", "절현", "페보니우스활", "소심", "제례의악장", "음유시인의악장", "페보니우스비전", "페보니우스장창", "용학살창", "빗물베기", "제례대검",
+                        "시간의검", "페보니우스대검", "용의포효", "제례검", "피리검", "페보니우스검"]
+
+global standardGachaWeapon5 
+standardGachaWeapon5 = [10, "천공의날개", "천공의두루마리", "천공의마루", "천공의긍지", "천공의검", "아모스의활", "사풍원서", "화박연", "늑대의말로", "매의검"]
+
+global standardGachaList
+standardGachaList = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+
+global standardGachaResult
+standardGachaResult = [ ]
+
 @client.event
 async def on_ready(): # 봇이 준비가 되면 1회 실행되는 부분입니다.
 
